@@ -1,11 +1,12 @@
 from personagem import Personagem
 from vilao import Vilao
+from heroi import Heroi
 
 def main():
     # Criando personagens e vilões
-    heroi = Personagem('Link', 30, 100)
-    npc = Personagem('Zelda', 28, 80)
-    vilao = Vilao('Ganon', 45, 120, 'Alta')
+    heroi = Heroi('Link', 100, 15, 10, 1, [])
+    npc = Personagem('José', 80)
+    vilao = Vilao('Ganon', 100, 50, 20, 1, [], 'Baixa')
 
     # Mostrando personagens
     print(heroi)
@@ -13,7 +14,7 @@ def main():
     print(vilao)
 
     # Vilão ataca o herói
-    vilao.ataque(heroi)
+    vilao.atacar(heroi)
 
     # Melhorando a vida do herói
     heroi.upgrade_vida(20)
