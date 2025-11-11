@@ -56,22 +56,29 @@ class Personagem:
         """
         self.nome = nome_editado
 
-    def mostrar_vida(self):
-        tamanho_barra = 20
-        vida_atual = math.ceil((self.vida/self.vida_max)*tamanho_barra)
+    def mostrar_vida(self, tamanho_barra=20):
+        """
+        Cria uma barra no terminal para visualizar a quantidade de vida restante e total.
+        """
+        vida_atual = min(math.ceil((self.vida/self.vida_max)*tamanho_barra),tamanho_barra)
         vazio = tamanho_barra - vida_atual
         return f"[{'█' * vida_atual}{'░' * vazio}] {self.vida}/{self.vida_max} PV"
 
     def listar_inventario(self):
         """ 
-        Mostra os itens presentes no inventário do personagem.
+        Mostra os itens presentes no inventário do personagem. Utilizando os valores 'nome' e 'quantidade'.
         """
+        itens = []
         if not self.inventario:
-            print("O inventário está vázio!")
-            return
+            print("\nO inventário está vázio!")
+            return False, itens
 
-        for i, item in enumerate(sorted(self.inventario), start=1):
-            print(f"{i}. {item}")
+        for i, (item, dados) in enumerate(sorted(self.inventario.items()), start=1):
+            nome = dados.get('nome', item)
+            quantidade = dados.get('quantidade',0)
+            print(f"{i}. {nome} {quantidade}x")
+            itens.append(item)
+        return True, itens
 
     def dialogar(self):
         pass
