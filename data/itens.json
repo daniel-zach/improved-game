@@ -1,0 +1,27 @@
+{
+    "moeda":{
+        "tipo":"recurso",
+        "nome":"Moedas",
+        "quantidade": 1
+    },
+
+    "pocao_cura_p": {
+        "tipo":"consumivel",
+        "nome": "Poção de Cura Pequena",
+        "vida": 75,
+        "quantidade": 1
+    },
+    "pocao_cura_g": {
+        "tipo":"consumivel",
+        "nome": "Poção de Cura Grande",
+        "vida": 150,
+        "quantidade": 1
+    },
+
+    "graveto": {
+        "tipo":"arma",
+        "nome": "Graveto",
+        "ataque": 5,
+        "quantidade": 1
+    }
+}
