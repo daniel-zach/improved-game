@@ -2,7 +2,7 @@ import math
 import random
 from personagem import Personagem  # Importa a classe Personagem
 from heroi import Heroi
-from utils import limpar_terminal, enter_continuar
+from utils import limpar_terminal, enter_continuar, opcao_invalida
 
 class Vilao(Personagem):
     """
@@ -29,10 +29,16 @@ class Vilao(Personagem):
 
         inventario = self.inventario
 
-        for i in range(random.randint(1,3)): # Quantos itens poderão ser dados. Chance de 1/3 para 1, 2 e 3
+        for i in range(random.randint(1,2) + 1): # Quantos itens poderão ser dados. Chance de 1/2 para 1 e 2, e adiciona 1 para as moedas
             for item, probabilidade in inventario.items():
-                if random.random() <= (probabilidade/100): # Usa a probabilidade definida no item
-                    del inventario[item] # Remove o item dropado, impedindo réplicas.
+                if item == 'moeda': # Checamos se o item é uma moeda, pois sua lógica é diferente
+                    if random.randint(0,100) <= random.randint(60,80):
+                        del inventario[item]
+                        quantidade_moedas = probabilidade + int(probabilidade*random.uniform(-0.25, 0.25))
+                        Heroi.adicionar_item_inventario(jogador,item,quantidade_moedas)
+                        break
+                elif random.random() <= (probabilidade/100): # Usa a probabilidade definida no item
+                    del inventario[item] # Remove o item dropado, impedindo réplicas
                     Heroi.adicionar_item_inventario(jogador, item)
                     break
         
@@ -65,9 +71,10 @@ class Vilao(Personagem):
             elif opcao == "1":
                 jogador.atacar(self)
             elif opcao == "2":
-                jogador.menu_itens()
+                jogador.menu_inventario()
+                #continue
             else:
-                print("Opção inválida!")
+                opcao_invalida()
 
             if self.vida > 0:
                 self.atacar(jogador)

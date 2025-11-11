@@ -21,7 +21,37 @@
     "graveto": {
         "tipo":"arma",
         "nome": "Graveto",
+        "ataque": 2,
+        "quantidade": 1,
+        "equipado": false
+    },
+    "adaga": {
+        "tipo":"arma",
+        "nome": "Adaga",
         "ataque": 5,
-        "quantidade": 1
+        "quantidade": 1,
+        "equipado": false
+    },
+    "espada_curta": {
+        "tipo":"arma",
+        "nome": "Espada Curta",
+        "ataque": 8,
+        "quantidade": 1,
+        "equipado": false
+    },
+    "arco": {
+        "tipo":"arma",
+        "nome": "Arco",
+        "ataque": 6,
+        "defesa": 10,
+        "quantidade": 1,
+        "equipado": false
+    },
+    "martelo_guerra": {
+        "tipo":"arma",
+        "nome": "Martelo de Guerra",
+        "ataque": 12,
+        "quantidade": 1,
+        "equipado": false
     }
 }

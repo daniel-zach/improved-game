@@ -8,6 +8,9 @@ def limpar_terminal():
 def enter_continuar():
     input("\nPressione Enter para continuar...")
 
+def opcao_invalida():
+    print("\nOpção inválida!")
+
 def carregar_itens():
     try:
         with open("data/itens.json", encoding='utf-8') as f:

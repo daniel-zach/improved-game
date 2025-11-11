@@ -7,7 +7,7 @@
             "defesa": 0,
             "nivel": 1,
             "experiencia": 11,
-            "inventario": {"pocao_cura_p":10,"moeda":80,"graveto":2},
+            "inventario": {"moeda":10,"pocao_cura_p":10,"graveto":2},
             "maldade": 3
         },
         "goblin": {
@@ -17,17 +17,17 @@
             "defesa": 3,
             "nivel": 2,
             "experiencia": 18,
-            "inventario": {},
+            "inventario": {"moeda":15,"pocao_cura_p":15,"adaga":8},
             "maldade": 5
         },
-        "Slime": {
+        "slime": {
             "nome": "Slime",
             "vida_max": 77,
             "ataque": 12,
             "defesa": 5,
             "nivel": 3,
             "experiencia": 27,
-            "inventario": {},
+            "inventario": {"moeda":20,"pocao_cura_p":25,"pocao_cura_g":5},
             "maldade": 7
         },
         "esqueleto": {
@@ -37,7 +37,7 @@
             "defesa": 16,
             "nivel": 6,
             "experiencia": 53,
-            "inventario": {},
+            "inventario": {"moeda":25,"espada_curta":12,"arco":6,"pocao_cura_p":20,"pocao_cura_g":10},
             "maldade": 10
         },
         "troll": {
@@ -47,7 +47,7 @@
             "defesa": 24,
             "nivel": 8,
             "experiencia": 83,
-            "inventario": {},
+            "inventario": {"moeda":40,"martelo_guerra":8,"pocao_cura_g":20},
             "maldade": 13
         }
     },
