@@ -1,0 +1,70 @@
+{
+    "viloes": {
+        "aranha": {
+            "nome": "Aranha",
+            "vida_max": 35,
+            "ataque": 4,
+            "defesa": 0,
+            "nivel": 1,
+            "experiencia": 11,
+            "inventario": {"pocao_cura_p":10,"moeda":80,"graveto":2},
+            "maldade": 3
+        },
+        "goblin": {
+            "nome": "Goblin",
+            "vida_max": 50,
+            "ataque": 8,
+            "defesa": 3,
+            "nivel": 2,
+            "experiencia": 18,
+            "inventario": {},
+            "maldade": 5
+        },
+        "Slime": {
+            "nome": "Slime",
+            "vida_max": 77,
+            "ataque": 12,
+            "defesa": 5,
+            "nivel": 3,
+            "experiencia": 27,
+            "inventario": {},
+            "maldade": 7
+        },
+        "esqueleto": {
+            "nome": "Esqueleto",
+            "vida_max": 120,
+            "ataque": 29,
+            "defesa": 16,
+            "nivel": 6,
+            "experiencia": 53,
+            "inventario": {},
+            "maldade": 10
+        },
+        "troll": {
+            "nome": "Troll",
+            "vida_max": 168,
+            "ataque": 50,
+            "defesa": 24,
+            "nivel": 8,
+            "experiencia": 83,
+            "inventario": {},
+            "maldade": 13
+        }
+    },
+    "npcs": {
+        "joao": {
+            "nome": "João",
+            "vida_max": 50,
+            "ataque": 1,
+            "defesa": 10,
+            "nivel": 1,
+            "inventario": {
+                "pocao_cura_p": 100
+            },
+            "dialogos": {
+                "Olá!": "Oi, me chamo João. Você deveria tomar cuidado na floresta.",
+                "Como posso ganhar experiência?": "Acho que matar alguns monstros deve ser o suficiente para te ensinar uma coisa ou outra."
+            }
+        }
+    }
+}
