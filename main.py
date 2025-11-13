@@ -8,7 +8,7 @@ from heroi import Heroi
 class JogoMain:
 
     def __init__(self):
-        self.jogador = Heroi("Jogador", 10, 10, 5, 1, 0, {})
+        self.jogador = Heroi("Jogador", 100, 10, 5, 1, 0, {})
 
     def spawn(self, nome):
         """
@@ -116,9 +116,6 @@ class JogoMain:
                 enter_continuar()
 
     def main_encruzilhada(self):
-        self.jogador.adicionar_item_inventario('moeda',500)
-        self.jogador.adicionar_item_inventario('adaga')
-        self.jogador.adicionar_item_inventario('graveto')
         while True:
 
             if not self.jogador.esta_vivo: # Se o jogador estiver morto chamamos reviver()

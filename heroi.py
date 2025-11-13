@@ -1,4 +1,5 @@
 import math
+import random
 from personagem import Personagem  # Importa a classe Personagem
 from utils import carregar_itens, limpar_terminal, enter_continuar
 
@@ -9,7 +10,7 @@ class Heroi(Personagem):
     """
     def __init__(self, nome, vida_max, ataque, defesa, nivel, experiencia, inventario):
         super().__init__(nome, vida_max, ataque, defesa, nivel, experiencia, inventario)
-        self.exp_prox_nivel = int(75*(self.nivel**1.5)) # Função de progressão
+        self.exp_prox_nivel = 85
 
     def reviver(self):
         """
@@ -43,7 +44,7 @@ class Heroi(Personagem):
         """
         Reduz a vida de outro personagem atacado pelo herói.
         """   
-        dano_causado = max(1, self.ataque - math.floor(personagem.defesa / 3)) # O dano é o valor de ataque menos um terço do valor de defesa do oponente. Com valor mínimo 1
+        dano_causado = max(1, self.ataque - math.floor(personagem.defesa / random.randrange(2,4))) # O dano é o valor de ataque menos uma parte do valor de defesa do oponente. Com valor mínimo 1
         print(f'\n{self.nome} atacou {personagem.nome}! Causando {dano_causado} de dano.')
         personagem.retirar_vida(dano_causado)
 
@@ -53,21 +54,37 @@ class Heroi(Personagem):
         """   
         self.experiencia += acres
         self.checar_nivel()
+        print(f"Você recebeu {acres} de Exp.")
 
     def checar_nivel(self):
         """
+        Define as fórmulas de progressão
         Verifica a experiência do jogador, se for o suficiente aumenta o nível. Com um limite de nível 10.
         """
+        level_up = False
         while self.experiencia >= self.exp_prox_nivel and self.nivel < 10:
                 self.nivel +=1
-                self.upgrade_vida_max(20)
-                self.dar_vida(20)
-                self.ataque +=2
-                self.defesa +=2
                 self.experiencia -= self.exp_prox_nivel
-                self.exp_prox_nivel = int(75*(self.nivel**1.5))
+                self.exp_prox_nivel = int(85*(self.nivel**1.5)) # Função de progressão
+                level_up = True
+
+        def escalar(valor_base, aumento, linear):
+            valor_escalado = valor_base * (1 + aumento)**(self.nivel - 1) + linear*(self.nivel - 1)
+            return round(valor_escalado)
+        
+        vida_max = escalar(self.vida_max, 0.11, 10) # Escala a vida: Aumento de 11% + linear 10
+        vida_extra = vida_max - self.vida_max # A vida que será curada ao subir de nível, equivale ao aumento de vida_max
+        ataque = escalar(self.ataque, 0.1, 2) # Escala o ataque: Aumento de 10% + linear 2
+        defesa = escalar(self.defesa, 0.1, 1) # Escala a defesa: Aumento de 10% + linear 1
+
+        if level_up:
+            self.vida_max = vida_max
+            self.dar_vida(vida_extra)
+            self.ataque = ataque
+            self.defesa = defesa
+
         if self.experiencia > self.exp_prox_nivel and self.nivel >= 10:
-            self.experiencia = self.exp_prox_nivel
+            self.experiencia = self.exp_prox_nivel - 1
             
     def adicionar_item_inventario(self, item, quantidade=1):
         """
@@ -222,8 +239,8 @@ class Heroi(Personagem):
                     else:
                         self.remover_item_inventario('moeda')
                     self.adicionar_item_inventario(item)
-                    enter_continuar()
                 else: print(f"Você não tem dinheiro suficiente para comprar este item!")
+                enter_continuar()
             else:
                 print("\nNenhuma opção escolhida.")
                 return
@@ -234,7 +251,7 @@ class Heroi(Personagem):
         """
         exp_atual = min(math.ceil((self.experiencia/self.exp_prox_nivel)*tamanho_barra),tamanho_barra)
         vazio = tamanho_barra - exp_atual
-        return f"[{'█' * exp_atual}{'░' * vazio}] {self.experiencia}/{self.exp_prox_nivel:.0f} Exp - Nível: {self.nivel}"
+        return f"⟨{'█' * exp_atual}{'░' * vazio}⟩ {self.experiencia}/{self.exp_prox_nivel:.0f} Exp - Nível: {self.nivel}"
 
     def __str__(self):
         return f'Personagem: {self.nome}, Vida máxima: {self.vida_max}, Vida atual: {self.vida}, Ataque: {self.ataque}, Defesa: {self.defesa}, Nível: {self.nivel}, Inventário: {self.inventario}'

@@ -44,7 +44,7 @@
         "tipo":"arma",
         "nome": "Arco",
         "ataque": 6,
-        "defesa": 10,
+        "defesa": 2,
         "quantidade": 1,
         "equipado": false
     },

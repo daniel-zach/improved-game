@@ -13,11 +13,36 @@ class Vilao(Personagem):
         super().__init__(nome, vida_max, ataque, defesa, nivel, experiencia, inventario)
         self.maldade = maldade
 
+    def balancear_nivel(self, jogador):
+        """
+        Define as fórmulas de progressão.
+        Balancemento dos stats de acordo com o nível do jogador.
+        """
+        nivel_jogador = jogador.nivel
+        
+        def escalar(valor_base, aumento, linear, fator_maldade=0):
+            valor_escalado = valor_base * (1 + aumento)**(nivel_jogador - self.nivel) + linear*(nivel_jogador - self.nivel)
+            valor_final = round(valor_escalado * (1 + self.maldade * fator_maldade))
+            return valor_final
+        
+        vida = max(1, escalar(self.vida_max, 0.12, 5, 0.02)) # Escala a vida: Aumento de 12% + linear 5 + aumento por maldade de 2%
+        ataque = max(1, escalar(self.ataque, 0.1, 1, 0.03)) # Escala o ataque: Aumento de 10% + linear 1 + aumento por maldade de 3%
+        defesa = max(0, escalar(self.defesa, 0.08, 0.4, 0.015)) # Escala a defesa: Aumento de 8% + linear 0.5 + aumento por maldade de 1.5%
+        experiencia = max(1, math.floor(escalar(self.experiencia, 0.04, 1) / 1.25**(nivel_jogador - self.nivel))) # Escala a experiência: Aumento de 4% + linear 1. Reduz quando o nível do jogador é mais alto
+
+        self.vida_max = vida
+        self.vida = vida
+        self.ataque = ataque
+        self.defesa = defesa
+        self.experiencia =experiencia
+        
+        
+
     def atacar(self, personagem):
         """
         Reduz a vida de outro personagem atacado pelo vilão. Retorna True se o ataque matou o personagem.
         """   
-        dano_causado = max(1, self.ataque - math.floor(personagem.defesa / 2)) # O dano é o valor de ataque menos metade do valor de defesa do oponente. Com valor mínimo 1
+        dano_causado = max(1, self.ataque - math.floor(personagem.defesa / random.randrange(1,4))) # O dano é o valor de ataque menos uma parte do valor de defesa do oponente. Com valor mínimo 1
         print(f'\n{self.nome} atacou {personagem.nome}! Causando {dano_causado} de dano.')
         personagem.retirar_vida(dano_causado)
 
@@ -57,6 +82,8 @@ class Vilao(Personagem):
             print("Este inimigo é poderoso demais para você!")
             enter_continuar()
             return
+
+        self.balancear_nivel(jogador)
 
         while True:
             limpar_terminal()

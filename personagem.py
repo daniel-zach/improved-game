@@ -76,7 +76,7 @@ class Personagem:
         """
         vida_atual = min(math.ceil((self.vida/self.vida_max)*tamanho_barra),tamanho_barra)
         vazio = tamanho_barra - vida_atual
-        return f"[{'█' * vida_atual}{'░' * vazio}] {self.vida}/{self.vida_max} PV"
+        return f"⟨{'█' * vida_atual}{'░' * vazio}⟩ {self.vida}/{self.vida_max} PV"
 
     def listar_inventario(self):
         """ 
