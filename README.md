@@ -1,4 +1,4 @@
-# DESAFIO 🕹️ Improve This Game 🕹️
+# Improved RPG Game v0.6
 
 ### Universidade Federal Rural de Pernambuco  
 **Departamento de Estatística e Informática**  
@@ -9,7 +9,7 @@
 
 ## **Descrição do Projeto**
 
-Este projeto é uma versão aprimorada de um jogo de personagens originalmente proposto como desafio de Programação Orientada a Objetos (POO).  
+Este projeto é uma versão aprimorada de um jogo de personagens originalmente proposto como **desafio** de Programação Orientada a Objetos (POO).  
 Foram aplicados conceitos de **herança**, **polimorfismo**, **listas**, **dicionários** e **estruturas de controle** para criar uma experiência mais interativa e dinâmica.
 
 ## **Principais Melhorias Implementadas**
@@ -28,8 +28,27 @@ O projeto contém os seguintes arquivos:
 
 - `personagem.py` – Define a classe base `Personagem`.  
 - `vilao.py` – Define a classe `Vilao`, herdando de `Personagem` com métodos únicos, como `batalhar()` e `dar_loot()`.  
-- `heroi.py` – Define a classe `Heroi`, herdando de `Personagem` e incluindo métodos como `usar_item()` e `checar_nivel()`.  
+- `heroi.py` – Define a classe `Heroi`, herdando de `Personagem` e incluindo métodos como `usar_item()` e `checar_nivel()`. Faz também a sobrescrita do método `morrer()` para gerar uma interação única.
 - `utils.py` – Contém funções auxiliares para controle do jogo e formatação de mensagens.  
 - `main.py` – Arquivo principal para executar o jogo e controlar as interações entre heróis e vilões.  
 
-## Improved RPG Game v0.4
+## **Improved RPG Game - Release Notes**
+
+# v0.6
+- Balanceamento do sistema de níveis. Stats de inimigos baseados no nível do jogador.
+- Sistema de morte, com melhoria da fuga de batalhas.
+- Sistema de loja. Com itens sendo vendidos por npcs.
+- Inventario mostra itens equipados e seus stats.
+- Correção de bugs no inventário/itens. Agora só é possível equipar um item.
+
+# v0.5
+- Sistema completo de itens. Com uso de consumíveis e equipáveis.
+- Sistema de loot. Monstros agora dropam loot de acordo com as probabilidades definidas em seu inventário.
+- Melhorias na interface e de qualidade de vida.
+- Correção de bugs.
+
+## Improved RPG Game
+
+**Feito por:** [Daniel Zacheu](https://github.com/daniel-zach)
+
+**Projeto original:** [improve-this-game](https://github.com/profcvanut/improve-this-game)
