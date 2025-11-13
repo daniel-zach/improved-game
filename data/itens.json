@@ -22,6 +22,7 @@
         "tipo":"arma",
         "nome": "Graveto",
         "ataque": 2,
+        "vida_max":2,
         "quantidade": 1,
         "equipado": false
     },

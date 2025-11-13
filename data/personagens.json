@@ -7,7 +7,7 @@
             "defesa": 0,
             "nivel": 1,
             "experiencia": 11,
-            "inventario": {"moeda":10,"pocao_cura_p":10,"graveto":2},
+            "inventario": {"moeda":10,"pocao_cura_p":10,"graveto":1},
             "maldade": 3
         },
         "goblin": {
@@ -52,14 +52,27 @@
         }
     },
     "npcs": {
-        "joao": {
-            "nome": "João",
-            "vida_max": 50,
+        "guilherme":{
+            "nome": "Guilherme",
+            "vida_max": 39,
             "ataque": 1,
-            "defesa": 10,
-            "nivel": 1,
+            "defesa": 500,
+            "nivel": 500,
             "inventario": {
-                "pocao_cura_p": 100
+                "pocao_cura_p": 100, "pocao_cura_g":200
+            },
+            "dialogos": {
+                "Olá!": "Bem vindo, me chamo Gui. Ofereço itens da melhor qualidade!"
+            }
+        },
+        "vini": {
+            "nome": "Vini",
+            "vida_max": 67,
+            "ataque": 1,
+            "defesa": 67,
+            "nivel": 13,
+            "inventario": {
+                "graveto": 50
             },
             "dialogos": {
                 "Olá!": "Oi, me chamo João. Você deveria tomar cuidado na floresta.",

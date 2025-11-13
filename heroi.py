@@ -1,6 +1,6 @@
 import math
 from personagem import Personagem  # Importa a classe Personagem
-from utils import carregar_itens, limpar_terminal, opcao_invalida
+from utils import carregar_itens, limpar_terminal, enter_continuar
 
 class Heroi(Personagem):
     """ 
@@ -33,7 +33,7 @@ class Heroi(Personagem):
         """
         while self.experiencia >= self.exp_prox_nivel and self.nivel < 10:
                 self.nivel +=1
-                self.vida_max +=20
+                self.upgrade_vida_max(20)
                 self.dar_vida(20)
                 self.ataque +=2
                 self.defesa +=2
@@ -43,7 +43,6 @@ class Heroi(Personagem):
             self.experiencia = self.exp_prox_nivel
             
     def adicionar_item_inventario(self, item, quantidade=1):
-        #OBS: Sistema de itens poderia ser melhorado, baseado em uma classe Itens.
         """
         Adiciona itens ao inventário. Apenas uma arma de cada tipo é permitida, se for recurso ou consumível adiciona ao valor 'quantidade' do item.
         """
@@ -65,21 +64,33 @@ class Heroi(Personagem):
                 inventario[item]['quantidade'] = quantidade
             print(f"{quantidade:02}x {propriedades.get('nome')} adicionado ao inventário!")
         else: raise ValueError(f"ERRO: Não existe item do tipo '{item}' na tabela.")
+        
 
     def remover_item_inventario(self,item):
-        pass
+        """
+        Remove o item do inventário.
+        """
+        print("Item sendo removido: "+item)
+        inventario = self.inventario
+        if item in inventario:
+            del inventario[item]
+        else: return ValueError(f"ERRO: Não existe '{item}' no inventário.")
 
     def equipar_item(self, item):
         """
         Equipa um item que esteja no inventário, passando seus stats para o jogador.
         """
+        # Se o sistema for aumentado para conter um item como 'armadura', o check deverá levar em conta o tipo de item.
         inventario = self.inventario
         if item in inventario:
             if not inventario[item].get('equipado',False):
+                for i in inventario: # Procuramos por outros itens que estejam equipados e os desequipamos
+                    if inventario[i].get('equipado', False):
+                        self.desequipar_item(i)
                 inventario[item]['equipado'] = True
                 for key, value in inventario[item].items():
                     if key == 'vida_max':
-                        self.vida_max += value
+                        self.upgrade_vida_max(value)
                     if key == 'ataque':
                         self.ataque += value
                     if key == 'defesa':
@@ -98,7 +109,7 @@ class Heroi(Personagem):
                 inventario[item]['equipado'] = False
                 for key, value in inventario[item].items():
                     if key == 'vida_max':
-                        self.vida_max -= value
+                        self.downgrade_vida_max(value)
                     if key == 'ataque':
                         self.ataque -= value
                     if key == 'defesa':
@@ -114,14 +125,15 @@ class Heroi(Personagem):
         if item in inventario:
             tipo_item = inventario[item].get('tipo')
             quantidade_item = inventario[item].get('quantidade',0)
+            quantidade_final = quantidade_item - 1
             item_equipado = inventario[item].get('equipado',False)
             # TODO um for loop para cada value
             if tipo_item == 'consumivel' and quantidade_item > 0:
                 if 'vida' in inventario[item]:
                     self.dar_vida(inventario[item].get('vida'))
                 else: raise ValueError(f"ERRO: valor a ser alterado não encontrado em {item}.")
-                quantidade_final = quantidade_item - 1
                 inventario[item]['quantidade'] = quantidade_final
+                enter_continuar()
             elif tipo_item == 'arma':
                 if not item_equipado:
                     self.equipar_item(item)
@@ -129,7 +141,7 @@ class Heroi(Personagem):
                     self.desequipar_item(item)
             else:
                 print(f"Você não pode usar um item deste tipo.")  
-            if quantidade_item <= 0:
+            if quantidade_item < 1:
                 self.remover_item_inventario(item)
         else: raise ValueError(f"ERRO: Item do tipo '{item}' não existe no inventário.")
 
@@ -137,22 +149,42 @@ class Heroi(Personagem):
         """
         Exibe o menu de inventário, permitindo o uso de itens.
         """
+        while True:
+            limpar_terminal()
+            print(f"{'⋮'*21} Inventário {'⋮'*21}\n")
+            print("Digite o número correspondente ao item que deseja usar:\n")
+
+            sucesso, itens = self.listar_inventario()
+            if not sucesso:
+                return
+            opcao = input("\nEscolha um item: ").strip()
+
+            if opcao.isdigit() and 1 <= int(opcao) <= len(itens):
+                valor = itens[int(opcao) - 1]
+                self.usar_item(valor)
+            else:
+                print("\nNenhuma opção escolhida.")
+                return
+
+    def menu_negociar(self, personagem):
         limpar_terminal()
-        print(f"{'⋮'*21} Inventário {'⋮'*21}\n")
+        print(f"{'⋮'*15} Loja do {personagem.nome} {'⋮'*15}\n")
         print("Digite o número correspondente ao item que deseja usar:\n")
 
-        sucesso, itens = self.listar_inventario()
+        sucesso, itens, valores = personagem.itens_a_venda()
         if not sucesso:
             return
-
+        
         opcao = input("\nEscolha um item: ").strip()
 
         if opcao.isdigit() and 1 <= int(opcao) <= len(itens):
-            valor = itens[int(opcao) - 1]
-            self.usar_item(valor)
+            item = itens[int(opcao) - 1]
+            valor = valores[int(opcao) - 1]
+            if valor > 50: print("$"+str(valor)) #TODO money
+            self.adicionar_item_inventario(item)
         else:
             print("\nNenhuma opção escolhida.")
-            return
+            return       
 
     def mostrar_experiencia(self,tamanho_barra=30):
         """
