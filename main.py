@@ -11,6 +11,9 @@ class JogoMain:
         self.jogador = Heroi("Jogador", 100, 10, 5, 1, 0, {})
 
     def spawn(self, nome):
+        """
+        Inicializa um personagem, checando se é NPC ou vilão.
+        """
         if nome in carregar_personagens().get("viloes", {}):
             dados = carregar_personagens()["viloes"][nome]
             return Vilao(**dados)
@@ -27,25 +30,27 @@ class JogoMain:
 
     def floresta(self):
         """Cenário de floresta"""
-        
-        while True:
+
+        while self.jogador.esta_vivo:
             limpar_terminal()
             self.hud()
-            print(f"\n{'⸬'*19} Floresta {'⸬'*19}\n")
+            print(f"\n{'𓃑'*19} Floresta {'𓃑'*19}\n")
             print("E/I. Abrir inventário")
             print("1. Atacar aranhas")
             print("2. Atacar goblins")
             print("3. Atacar slimes")
-            print("0. Para voltar a vila")
+            print("0. Para voltar")
+
+            if not self.jogador.esta_vivo:
+                break
 
             opcao = input("\nEscolha uma opção: ").strip()
 
             if opcao == "0":
-                print("Obrigado por jogar!")
+                print("Você anda até a encruzilhada")
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
-                enter_continuar()
             elif opcao == "1":
                 self.spawn("aranha").batalhar(self.jogador)
             elif opcao == "2":
@@ -59,23 +64,22 @@ class JogoMain:
     def caverna(self):
         """Cenário de caverna"""
         
-        while True:
+        while self.jogador.esta_vivo:
             limpar_terminal()
             self.hud()
-            print(f"\n{'⸬'*14} Caverna Misteriosa {'⸬'*14}\n")
+            print(f"\n{'𓃑'*14} Caverna Misteriosa {'𓃑'*14}\n")
             print("E/I. Abrir inventário")
             print("1. Atacar esqueletos")
             print("2. Atacar troll")
-            print("0. Para voltar a vila")
+            print("0. Para voltar")
 
             opcao = input("\nEscolha uma opção: ").strip()
 
             if opcao == "0":
-                print("Obrigado por jogar!")
+                print("Você anda até a encruzilhada")
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
-                enter_continuar()
             elif opcao == "1":
                 self.spawn("esqueleto").batalhar(self.jogador)
             elif opcao == "2":
@@ -84,17 +88,47 @@ class JogoMain:
                 opcao_invalida()
                 enter_continuar()
 
-    def main(self):
-        while True:
+    def vila(self):
+        """ Cenário da vila """
+        while self.jogador.esta_vivo:
             limpar_terminal()
             self.hud()
-            print(f"\n{'⸬'*17} Vila Pacata {'⸬'*18}\n")
+            print(f"\n{'𓏬'*18} Vila Pacata {'𓏬'*19}\n")
             print("E/I. Abrir inventário")
-            print("1. Visitar a loja")
+            print("1. Entrar na loja")
+            print("2. Falar com Gui")
+            print("3. Falar com Vini")
+            print("0. Para sair da vila")
+            opcao = input("\nEscolha uma opção: ").strip().lower()
+
+            if opcao == "0":
+                break
+            elif opcao in ["e", "i"]:
+                self.jogador.menu_inventario()
+            elif opcao == "1":
+                self.jogador.menu_negociar(self.spawn('guilherme'))
+            elif opcao == "2":
+                self.spawn('guilherme').dialogar()
+            elif opcao == "3":
+                self.spawn('vini').dialogar()
+            else:
+                opcao_invalida()
+                enter_continuar()
+
+    def main_encruzilhada(self):
+        while True:
+
+            if not self.jogador.esta_vivo: # Se o jogador estiver morto chamamos reviver()
+                self.jogador.reviver()
+
+            limpar_terminal()
+            self.hud()
+            print(f"\n{'𓏬'*18} Encruzilhada {'𓏬'*18}\n")
+            print("E/I. Abrir inventário")
+            print("1. Visitar a vila")
             print("2. Ir para a floresta")
             print("3. Ir para as cavernas")
-            print("0. Para sair")
-
+            print("0. Para sair do jogo")
             opcao = input("\nEscolha uma opção: ").strip().lower()
 
             if opcao == "0":
@@ -102,9 +136,8 @@ class JogoMain:
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
-                enter_continuar()
             elif opcao == "1":
-                pass
+                self.vila()
             elif opcao == "2":
                 self.floresta()
             elif opcao == "3":
@@ -114,4 +147,4 @@ class JogoMain:
                 enter_continuar()
 
 if __name__ == "__main__":
-    JogoMain().main()
+    JogoMain().main_encruzilhada()

@@ -6,9 +6,9 @@
             "ataque": 4,
             "defesa": 0,
             "nivel": 1,
-            "experiencia": 11,
-            "inventario": {"moeda":10,"pocao_cura_p":10,"graveto":2},
-            "maldade": 3
+            "experiencia": 10,
+            "inventario": {"moeda":10,"pocao_cura_p":10,"graveto":1},
+            "maldade": 5
         },
         "goblin": {
             "nome": "Goblin",
@@ -26,9 +26,9 @@
             "ataque": 12,
             "defesa": 5,
             "nivel": 3,
-            "experiencia": 27,
-            "inventario": {"moeda":20,"pocao_cura_p":25,"pocao_cura_g":5},
-            "maldade": 7
+            "experiencia": 28,
+            "inventario": {"moeda":20,"pocao_cura_p":15,"pocao_cura_g":5},
+            "maldade": 3
         },
         "esqueleto": {
             "nome": "Esqueleto",
@@ -36,9 +36,9 @@
             "ataque": 29,
             "defesa": 16,
             "nivel": 6,
-            "experiencia": 53,
+            "experiencia": 56,
             "inventario": {"moeda":25,"espada_curta":12,"arco":6,"pocao_cura_p":20,"pocao_cura_g":10},
-            "maldade": 10
+            "maldade": 5
         },
         "troll": {
             "nome": "Troll",
@@ -46,24 +46,38 @@
             "ataque": 50,
             "defesa": 24,
             "nivel": 8,
-            "experiencia": 83,
+            "experiencia": 112,
             "inventario": {"moeda":40,"martelo_guerra":8,"pocao_cura_g":20},
-            "maldade": 13
+            "maldade": 7
         }
     },
     "npcs": {
-        "joao": {
-            "nome": "João",
-            "vida_max": 50,
+        "guilherme":{
+            "nome": "Guilherme",
+            "vida_max": 39,
             "ataque": 1,
-            "defesa": 10,
-            "nivel": 1,
+            "defesa": 500,
+            "nivel": 500,
             "inventario": {
-                "pocao_cura_p": 100
+                "pocao_cura_p": 100, "pocao_cura_g":200
             },
             "dialogos": {
-                "Olá!": "Oi, me chamo João. Você deveria tomar cuidado na floresta.",
-                "Como posso ganhar experiência?": "Acho que matar alguns monstros deve ser o suficiente para te ensinar uma coisa ou outra."
+                "Olá!": "Bem vindo, me chamo Gui. Ofereço poções da melhor qualidade!",
+                "Como você consegue essas poções?": "Eu mesmo as faço, são muito boas."
+            }
+        },
+        "vini": {
+            "nome": "Vini",
+            "vida_max": 67,
+            "ataque": 1,
+            "defesa": 67,
+            "nivel": 13,
+            "inventario": {
+                "graveto": 50
+            },
+            "dialogos": {
+                "Olá!": "Vini, meu nome. Você devia tomar cuidado na floresta.",
+                "Você está bem?": "Mosquitos, muitos mosquitos."
             }
         }
     }

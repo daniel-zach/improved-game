@@ -22,6 +22,7 @@
         "tipo":"arma",
         "nome": "Graveto",
         "ataque": 2,
+        "vida_max":2,
         "quantidade": 1,
         "equipado": false
     },
@@ -43,7 +44,7 @@
         "tipo":"arma",
         "nome": "Arco",
         "ataque": 6,
-        "defesa": 10,
+        "defesa": 2,
         "quantidade": 1,
         "equipado": false
     },
