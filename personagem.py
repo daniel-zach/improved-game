@@ -7,6 +7,7 @@ class Personagem:
     """
     def __init__(self, nome, vida_max=100, ataque=1, defesa=5, nivel=1, experiencia=0, inventario={}, dialogos={}):
         self.nome = nome
+        self.esta_vivo = True
         self.vida_max = vida_max
         self.vida = vida_max
         self.ataque = ataque
@@ -15,6 +16,13 @@ class Personagem:
         self.experiencia = experiencia
         self.inventario = inventario
         self.dialogos = dialogos
+
+    def morrer(self):
+        """
+        Comportamento padrão de morte.
+        """
+        self.esta_vivo = False
+        print(f"{self.nome} morreu!")
 
     def dar_vida(self, acres=10):
         """
@@ -28,14 +36,14 @@ class Personagem:
 
     def retirar_vida(self, decres=10):
         """
-        Reduz a vida do personagem, garantindo que não fique negativa.
+        Reduz a vida do personagem, se chegar à 0 mata o personagem.
         """
         if self.vida > decres:
             self.vida -= decres
+            print(f'Vida atual de {self.nome}: {self.vida}')
         else:
             self.vida = 0
-            #TODO Chamar morte
-        print(f'Vida atual de {self.nome}: {self.vida}')
+            self.morrer()
 
     def upgrade_vida_max(self, acres=10):
         """
@@ -88,14 +96,14 @@ class Personagem:
             lista_formatada = ""
             for valor in sorted(dados):
                 if valor in lista_verificar:
-                    lista_formatada = f"{lista_formatada}{valor.capitalize()} - {dados.get(valor)} "
+                    lista_formatada = f"{lista_formatada}︱{valor.capitalize()}: {dados.get(valor)} "
 
             if equipado:
-                print(f"{i}. {nome} ★︱{lista_formatada} ")
-            elif dados.get('tipo') == 'arma':
-                print(f"{i}. {nome} ☆︱{lista_formatada} ")
+                print(f"{i}. {nome} ★ {lista_formatada} ")
+            elif 'equipado' in dados:
+                print(f"{i}. {nome} ☆ {lista_formatada} ")
             else:
-                print(f"{i}. {nome} {quantidade}x︱{lista_formatada}")
+                print(f"{i}. {nome} {quantidade}x {lista_formatada}")
             itens.append(item)
         return True, itens
 

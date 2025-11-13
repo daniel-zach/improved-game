@@ -15,11 +15,15 @@ class Vilao(Personagem):
 
     def atacar(self, personagem):
         """
-        Reduz a vida de outro personagem atacado pelo vilão.
+        Reduz a vida de outro personagem atacado pelo vilão. Retorna True se o ataque matou o personagem.
         """   
         dano_causado = max(1, self.ataque - math.floor(personagem.defesa / 2)) # O dano é o valor de ataque menos metade do valor de defesa do oponente. Com valor mínimo 1
         print(f'\n{self.nome} atacou {personagem.nome}! Causando {dano_causado} de dano.')
         personagem.retirar_vida(dano_causado)
+
+        if not personagem.esta_vivo:
+            return True
+        else: return False
 
     def dar_loot(self, jogador):
         """
@@ -34,10 +38,10 @@ class Vilao(Personagem):
                 if item == 'moeda': # Checamos se o item é uma moeda, pois sua lógica é diferente
                     if random.randint(0,100) <= random.randint(60,80):
                         del inventario[item]
-                        quantidade_moedas = probabilidade + int(probabilidade*random.uniform(-0.25, 0.25))
+                        quantidade_moedas = probabilidade + int(probabilidade*random.uniform(-0.3, 0.3)) # Aqui o valor 'probabilidade' se refere a quantidade de moedas padrão do vilão
                         Heroi.adicionar_item_inventario(jogador,item,quantidade_moedas)
                         break
-                elif random.random() <= (probabilidade/100): # Usa a probabilidade definida no item
+                elif random.randint(0,100) <= probabilidade: # Usa a probabilidade definida no item
                     del inventario[item] # Remove o item dropado, impedindo réplicas
                     Heroi.adicionar_item_inventario(jogador, item)
                     break
@@ -66,18 +70,28 @@ class Vilao(Personagem):
             opcao = input("\nEscolha uma opção: ").strip()
 
             if opcao == "0":
-                print("Você fugiu!")
+                if random.random() <= 0.35: # Chance de 35% do jogador ser atacado quando foge
+                    if not self.atacar(jogador):
+                        print("\nVocê foi atacado enquanto fugia!")
+                    else: 
+                        enter_continuar()
+                        break
+                else: print("\nVocê fugiu!")
+                enter_continuar()
                 break
             elif opcao == "1":
                 jogador.atacar(self)
             elif opcao == "2":
                 jogador.menu_inventario()
-                #continue
+                continue
             else:
                 opcao_invalida()
+                continue
 
-            if self.vida > 0:
-                self.atacar(jogador)
+            if self.vida > 0: # Se estiver vivo ataca o jogador
+                if self.atacar(jogador):
+                    enter_continuar()
+                    break
             else:
                 limpar_terminal()
                 print(f"Você derrotou {self.nome}!")

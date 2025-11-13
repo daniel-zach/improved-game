@@ -11,6 +11,33 @@ class Heroi(Personagem):
         super().__init__(nome, vida_max, ataque, defesa, nivel, experiencia, inventario)
         self.exp_prox_nivel = int(75*(self.nivel**1.5)) # Função de progressão
 
+    def reviver(self):
+        """
+        Revive o herói, resetando os stats de vida.
+        """
+        self.esta_vivo = True
+        self.vida = self.vida_max
+
+    def morrer(self):
+        """
+        Sobrescrita do método morrer() para o Heroi.
+        Esvazia o inventário deixando apenas metade das moedas.
+        """
+        self.esta_vivo = False
+        inventario = self.inventario
+        if inventario:
+            for item in inventario: # Desequipa todos os itens
+                self.desequipar_item(item)
+            moedas = 0
+            if 'moeda' in inventario:
+                moedas = int(inventario['moeda'].get('quantidade')/2) # Calcula a metade das moedas atuais
+            self.inventario = {}
+            if moedas > 0:
+                self.adicionar_item_inventario('moeda',moedas) # Adiciona o novo valor de moedas
+        self.experiencia = 0
+        limpar_terminal()
+        print("Você foi derrotado!")
+        print("Parece que seus itens foram levados.")
     
     def atacar(self, personagem):
         """
@@ -57,7 +84,7 @@ class Heroi(Personagem):
                     nova_quantidade = quantidade_atual + quantidade
                     inventario[item]['quantidade'] = nova_quantidade
                 else:
-                    print("Você já tem este item.")
+                    print(f"Você já tem {item}.")
                     return
             else:
                 inventario[item] = propriedades
@@ -95,8 +122,7 @@ class Heroi(Personagem):
                         self.ataque += value
                     if key == 'defesa':
                         self.defesa += value
-            else:
-                print(f"O item {inventario[item].get('nome')} já está equipado.")
+            else: return f"O item {inventario[item].get('nome')} já está equipado."
 
 
     def desequipar_item(self, item):
@@ -114,8 +140,7 @@ class Heroi(Personagem):
                         self.ataque -= value
                     if key == 'defesa':
                         self.defesa -= value
-            else:
-                print(f"O item {inventario[item].get('nome')} não está equipado.")
+            else: return f"O item {inventario[item].get('nome')} não está equipado."
 
     def usar_item(self, item):
         """
@@ -124,24 +149,24 @@ class Heroi(Personagem):
         inventario = self.inventario
         if item in inventario:
             tipo_item = inventario[item].get('tipo')
-            quantidade_item = inventario[item].get('quantidade',0)
-            quantidade_final = quantidade_item - 1
+            quantidade_item = inventario[item].get('quantidade',0) # Este valor é definido aqui e não atualiza mesmo usando 'quantidade_item' depois
             item_equipado = inventario[item].get('equipado',False)
-            # TODO um for loop para cada value
-            if tipo_item == 'consumivel' and quantidade_item > 0:
-                if 'vida' in inventario[item]:
-                    self.dar_vida(inventario[item].get('vida'))
-                else: raise ValueError(f"ERRO: valor a ser alterado não encontrado em {item}.")
-                inventario[item]['quantidade'] = quantidade_final
+            if tipo_item == 'consumivel' and quantidade_item > 0: # Checamos se é consumível
+                for key, value in inventario[item].items(): # Adicionamos cada stat ao player se houver
+                    if key == 'vida':
+                        self.dar_vida(value)
+                    elif key == 'experiencia':
+                        self.dar_experiencia(value)
+                inventario[item]['quantidade'] = quantidade_item - 1
                 enter_continuar()
-            elif tipo_item == 'arma':
+            elif 'equipado' in inventario[item]: # Se for do tipo "equipável" chamamos equipar_item ou desequipar_item
                 if not item_equipado:
                     self.equipar_item(item)
                 elif item_equipado:
                     self.desequipar_item(item)
             else:
                 print(f"Você não pode usar um item deste tipo.")  
-            if quantidade_item < 1:
+            if inventario[item].get('quantidade',0) < 1: # Se no fim do uso a quantidade for 0, removemos o item do inventário
                 self.remover_item_inventario(item)
         else: raise ValueError(f"ERRO: Item do tipo '{item}' não existe no inventário.")
 
@@ -167,24 +192,41 @@ class Heroi(Personagem):
                 return
 
     def menu_negociar(self, personagem):
-        limpar_terminal()
-        print(f"{'⋮'*15} Loja do {personagem.nome} {'⋮'*15}\n")
-        print("Digite o número correspondente ao item que deseja usar:\n")
+        """
+        Menu de negociação com NPCs. Recebe do NPC os itens disponíveis e os custos.
+        Permite ao jogador comprar estes itens em troca de moedas.
+        """
+        while True:
+            limpar_terminal()
+            print(f"{'⋮'*17} Loja do {personagem.nome} {'⋮'*17}\n")
+            print("Digite o número correspondente ao item que deseja comprar:\n")
 
-        sucesso, itens, valores = personagem.itens_a_venda()
-        if not sucesso:
-            return
-        
-        opcao = input("\nEscolha um item: ").strip()
+            sucesso, itens, custos = personagem.itens_a_venda()
+            if not sucesso:
+                return
+            
+            inventario = self.inventario
+            quantidade_moedas = 0
+            if 'moeda' in inventario: # Checamos se há moedas no inventário e mostramos a quantia
+                quantidade_moedas = inventario['moeda'].get('quantidade',0)
+            print(f"\nVocê tem: ${quantidade_moedas}")
 
-        if opcao.isdigit() and 1 <= int(opcao) <= len(itens):
-            item = itens[int(opcao) - 1]
-            valor = valores[int(opcao) - 1]
-            if valor > 50: print("$"+str(valor)) #TODO money
-            self.adicionar_item_inventario(item)
-        else:
-            print("\nNenhuma opção escolhida.")
-            return       
+            opcao = input("\nEscolha um item: ").strip()
+
+            if opcao.isdigit() and 1 <= int(opcao) <= len(itens):
+                item = itens[int(opcao) - 1]
+                custo = custos[int(opcao) - 1]
+                if custo <= quantidade_moedas:
+                    if custo < quantidade_moedas:
+                        inventario['moeda']['quantidade'] = quantidade_moedas - custo
+                    else:
+                        self.remover_item_inventario('moeda')
+                    self.adicionar_item_inventario(item)
+                    enter_continuar()
+                else: print(f"Você não tem dinheiro suficiente para comprar este item!")
+            else:
+                print("\nNenhuma opção escolhida.")
+                return
 
     def mostrar_experiencia(self,tamanho_barra=30):
         """
