@@ -35,6 +35,7 @@ O projeto contém os seguintes arquivos:
 ## **Improved RPG Game - Release Notes**
 
 ### v0.7
+- Sistema de saves.
 - Correção de bugs no inventário.
 
 ### v0.6

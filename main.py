@@ -1,5 +1,4 @@
-import json
-import os
+from sistema_saves import SistemaSaves
 from utils import limpar_terminal, enter_continuar, opcao_invalida, carregar_personagens
 from personagem import Personagem
 from vilao import Vilao
@@ -8,7 +7,10 @@ from heroi import Heroi
 class JogoMain:
 
     def __init__(self):
-        self.jogador = Heroi("Jogador", 100, 10, 5, 1, 0, {})
+        self.sistemasaves = SistemaSaves(".save", "saves")
+        self.novo_jogador = Heroi("Jogador", 100, 10, 5, 1, 0, {})
+        self.jogador = self.novo_jogador
+        self.save_atual = None
 
     def spawn(self, nome):
         """
@@ -24,9 +26,8 @@ class JogoMain:
             raise ValueError(f"Personagem '{nome}' não encontrado.")
 
     def hud(self, tamanho_barra=25):
-        print(self.jogador.mostrar_vida(tamanho_barra))
+        print(self.jogador.mostrar_vida(tamanho_barra), f"︱{self.jogador.ataque} Atq︱{self.jogador.defesa} Def")
         print(self.jogador.mostrar_experiencia(tamanho_barra))
-        print(self.jogador.ataque,self.jogador.defesa)
         
 
     def floresta(self):
@@ -116,25 +117,73 @@ class JogoMain:
                 opcao_invalida()
                 enter_continuar()
 
-    def main_encruzilhada(self):
-        self.jogador.adicionar_item_inventario('adaga')
+    def save_menu(self):
+        """
+        Tela de saves, abre quando o programa é iniciado.
+        """
         while True:
+            limpar_terminal()
+            print(f"{'𓏬'*14} Escolha um save {'𓏬'*14}\n")
+            print("1. Save slot 1")
+            print("2. Save slot 2")
+            print("3. Save slot 3")
+            print("R. Resetar um save")
+
+            opcao = input("\nEscolha uma opção: ").strip().lower()
+
+            if opcao == "1":
+                self.jogador = self.sistemasaves.carregar_dados_jogo(['save_1'], [self.novo_jogador])
+                self.save_atual = 'save_1'
+                return
+            elif opcao == "2":
+                self.jogador = self.sistemasaves.carregar_dados_jogo(['save_2'], [self.novo_jogador])
+                self.save_atual = 'save_2'
+                return
+            elif opcao == "3":
+                self.jogador = self.sistemasaves.carregar_dados_jogo(['save_3'], [self.novo_jogador])
+                self.save_atual = 'save_3'
+                return
+            elif opcao == "r":
+                while True:
+                    limpar_terminal()
+                    print("Qual slot deseja resetar:\n")
+                    print("1. Save slot 1")
+                    print("2. Save slot 2")
+                    print("3. Save slot 3")
+                    print("Enter para cancelar")
+
+                    opcao_reset = input("\nEscolha uma opção: ").strip()
+
+                    if opcao_reset in ["1","2","3"]:
+                        self.sistemasaves.deletar_arquivo(f"save_{opcao_reset}")
+                        print(f"Save slot {opcao_reset} redefinido com sucesso!")
+                        enter_continuar()
+                        break
+                    else:
+                        break
+
+    def main_encruzilhada(self):
+        while True:
+
+            if not self.save_atual:
+                self.save_menu()
 
             if not self.jogador.esta_vivo: # Se o jogador estiver morto chamamos reviver()
                 self.jogador.reviver()
 
-            #limpar_terminal()
+            limpar_terminal()
             self.hud()
             print(f"\n{'𓏬'*18} Encruzilhada {'𓏬'*18}\n")
             print("E/I. Abrir inventário")
             print("1. Visitar a vila")
             print("2. Ir para a floresta")
             print("3. Ir para as cavernas")
-            print("0. Para sair do jogo")
+            print("0. Para salvar e sair")
             opcao = input("\nEscolha uma opção: ").strip().lower()
 
             if opcao == "0":
                 print("Obrigado por jogar!")
+                self.sistemasaves.salvar_dados_jogo([self.jogador],[self.save_atual])
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
@@ -144,8 +193,8 @@ class JogoMain:
                 self.floresta()
             elif opcao == "3":
                 self.caverna()
-            elif opcao == "4":
-                self.jogador.dar_experiencia(1000)
+            elif opcao == "xp":
+                self.jogador.dar_experiencia(500)
                 print(self.jogador)
             else:
                 opcao_invalida()
