@@ -1,4 +1,4 @@
-# Improved RPG Game v0.6
+# Improved RPG Game v0.7
 
 ### Universidade Federal Rural de Pernambuco  
 **Departamento de Estatística e Informática**  
@@ -34,14 +34,17 @@ O projeto contém os seguintes arquivos:
 
 ## **Improved RPG Game - Release Notes**
 
-# v0.6
+### v0.7
+- Correção de bugs no inventário.
+
+### v0.6
 - Balanceamento do sistema de níveis. Stats de inimigos baseados no nível do jogador.
 - Sistema de morte, com melhoria da fuga de batalhas.
 - Sistema de loja. Com itens sendo vendidos por npcs.
 - Inventario mostra itens equipados e seus stats.
 - Correção de bugs no inventário/itens. Agora só é possível equipar um item.
 
-# v0.5
+### v0.5
 - Sistema completo de itens. Com uso de consumíveis e equipáveis.
 - Sistema de loot. Monstros agora dropam loot de acordo com as probabilidades definidas em seu inventário.
 - Melhorias na interface e de qualidade de vida.

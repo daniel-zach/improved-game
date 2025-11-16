@@ -26,6 +26,7 @@ class JogoMain:
     def hud(self, tamanho_barra=25):
         print(self.jogador.mostrar_vida(tamanho_barra))
         print(self.jogador.mostrar_experiencia(tamanho_barra))
+        print(self.jogador.ataque,self.jogador.defesa)
         
 
     def floresta(self):
@@ -116,12 +117,13 @@ class JogoMain:
                 enter_continuar()
 
     def main_encruzilhada(self):
+        self.jogador.adicionar_item_inventario('adaga')
         while True:
 
             if not self.jogador.esta_vivo: # Se o jogador estiver morto chamamos reviver()
                 self.jogador.reviver()
 
-            limpar_terminal()
+            #limpar_terminal()
             self.hud()
             print(f"\n{'𓏬'*18} Encruzilhada {'𓏬'*18}\n")
             print("E/I. Abrir inventário")
@@ -142,6 +144,9 @@ class JogoMain:
                 self.floresta()
             elif opcao == "3":
                 self.caverna()
+            elif opcao == "4":
+                self.jogador.dar_experiencia(1000)
+                print(self.jogador)
             else:
                 opcao_invalida()
                 enter_continuar()
