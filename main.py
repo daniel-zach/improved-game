@@ -201,9 +201,6 @@ class JogoMain:
                 self.floresta()
             elif opcao == "3":
                 self.caverna()
-            elif opcao == "xp":
-                self.jogador.dar_experiencia(500)
-                print(self.jogador)
             else:
                 opcao_invalida()
                 enter_continuar()
