@@ -10,7 +10,8 @@ class Heroi(Personagem):
     """
     def __init__(self, nome, vida_max, ataque, defesa, nivel, experiencia, inventario):
         super().__init__(nome, vida_max, ataque, defesa, nivel, experiencia, inventario)
-        self.exp_prox_nivel = 85
+        self.experiencia_nivel2 = 85
+        self.exp_prox_nivel = self.experiencia_nivel2
 
     def reviver(self):
         """
@@ -35,7 +36,7 @@ class Heroi(Personagem):
             self.inventario = {}
             if moedas > 0:
                 self.adicionar_item_inventario('moeda',moedas) # Adiciona o novo valor de moedas
-        self.experiencia = 0
+        self.experiencia = int(self.experiencia/2)
         limpar_terminal()
         print("Você foi derrotado!")
         print("Parece que seus itens foram levados.")
@@ -65,8 +66,15 @@ class Heroi(Personagem):
         while self.experiencia >= self.exp_prox_nivel and self.nivel < 10:
                 self.nivel +=1
                 self.experiencia -= self.exp_prox_nivel
-                self.exp_prox_nivel = int(85*(self.nivel**1.5)) # Função de progressão
+                self.exp_prox_nivel = int(self.experiencia_nivel2 * (self.nivel**1.5)) # Função de progressão
                 level_up = True
+
+        itens_desequipados = []
+        if self.inventario:
+            for item in self.inventario:
+                if self.desequipar_item(item):
+                    itens_desequipados.append(item)
+            
 
         def escalar(valor_base, aumento, linear):
             valor_escalado = valor_base * (1 + aumento)**(self.nivel - 1) + linear*(self.nivel - 1)
@@ -82,6 +90,10 @@ class Heroi(Personagem):
             self.dar_vida(vida_extra)
             self.ataque = ataque
             self.defesa = defesa
+
+        if itens_desequipados:
+            for item in itens_desequipados:
+                self.equipar_item(item)
 
         if self.experiencia > self.exp_prox_nivel and self.nivel >= 10:
             self.experiencia = self.exp_prox_nivel - 1
@@ -127,7 +139,7 @@ class Heroi(Personagem):
         # Se o sistema for aumentado para conter um item como 'armadura', o check deverá levar em conta o tipo de item.
         inventario = self.inventario
         if item in inventario:
-            if not inventario[item].get('equipado',False):
+            if not inventario[item].get('equipado',True):
                 for i in inventario: # Procuramos por outros itens que estejam equipados e os desequipamos
                     if inventario[i].get('equipado', False):
                         self.desequipar_item(i)
@@ -139,7 +151,8 @@ class Heroi(Personagem):
                         self.ataque += value
                     if key == 'defesa':
                         self.defesa += value
-            else: return f"O item {inventario[item].get('nome')} já está equipado."
+                return True, f"{inventario[item].get('nome')} foi desequipado."
+            else: return False, f"O item {inventario[item].get('nome')} já está equipado."
 
 
     def desequipar_item(self, item):
@@ -157,7 +170,8 @@ class Heroi(Personagem):
                         self.ataque -= value
                     if key == 'defesa':
                         self.defesa -= value
-            else: return f"O item {inventario[item].get('nome')} não está equipado."
+                return True, f"{inventario[item].get('nome')} foi desequipado."
+            else: return False, f"O item {inventario[item].get('nome')} não está equipado."
 
     def usar_item(self, item):
         """
@@ -198,6 +212,7 @@ class Heroi(Personagem):
 
             sucesso, itens = self.listar_inventario()
             if not sucesso:
+                enter_continuar()
                 return
             opcao = input("\nEscolha um item: ").strip()
 
@@ -220,6 +235,7 @@ class Heroi(Personagem):
 
             sucesso, itens, custos = personagem.itens_a_venda()
             if not sucesso:
+                enter_continuar()
                 return
             
             inventario = self.inventario
