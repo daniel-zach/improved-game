@@ -36,6 +36,7 @@ O projeto contém os seguintes arquivos:
 
 ### v0.7
 - Sistema de saves.
+- Sistemas de diálogos.
 - Correção de bugs no inventário.
 
 ### v0.6

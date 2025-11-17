@@ -12,6 +12,9 @@ class JogoMain:
         self.jogador = self.novo_jogador
         self.save_atual = None
 
+    def salvar(self):
+        self.sistemasaves.salvar_dados_jogo([self.jogador],[self.save_atual])
+
     def spawn(self, nome):
         """
         Inicializa um personagem, checando se é NPC ou vilão.
@@ -50,6 +53,7 @@ class JogoMain:
 
             if opcao == "0":
                 print("Você anda até a encruzilhada")
+                self.salvar()
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
@@ -64,7 +68,7 @@ class JogoMain:
                 enter_continuar()
 
     def caverna(self):
-        """Cenário de caverna"""
+        """ Cenário de caverna """
         
         while self.jogador.esta_vivo:
             limpar_terminal()
@@ -79,6 +83,7 @@ class JogoMain:
 
             if opcao == "0":
                 print("Você anda até a encruzilhada")
+                self.salvar()
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
@@ -104,6 +109,7 @@ class JogoMain:
             opcao = input("\nEscolha uma opção: ").strip().lower()
 
             if opcao == "0":
+                self.salvar()
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()
@@ -119,7 +125,7 @@ class JogoMain:
 
     def save_menu(self):
         """
-        Tela de saves, abre quando o programa é iniciado.
+        Menu de saves, abre quando o programa é iniciado. Oferece 3 slots e permite redefini-los.
         """
         while True:
             limpar_terminal()
@@ -168,8 +174,10 @@ class JogoMain:
             if not self.save_atual:
                 self.save_menu()
 
-            if not self.jogador.esta_vivo: # Se o jogador estiver morto chamamos reviver()
+            if not self.jogador.esta_vivo: # Se o jogador estiver morto chamamos reviver() e salvamos o jogo
                 self.jogador.reviver()
+                self.salvar()
+                enter_continuar()
 
             limpar_terminal()
             self.hud()
@@ -182,8 +190,8 @@ class JogoMain:
             opcao = input("\nEscolha uma opção: ").strip().lower()
 
             if opcao == "0":
-                print("Obrigado por jogar!")
-                self.sistemasaves.salvar_dados_jogo([self.jogador],[self.save_atual])
+                print("\nObrigado por jogar!")
+                self.salvar()
                 break
             elif opcao in ["e", "i"]:
                 self.jogador.menu_inventario()

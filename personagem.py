@@ -1,5 +1,5 @@
 import math
-from utils import carregar_itens
+from utils import carregar_itens, enter_continuar, limpar_terminal
 
 class Personagem:
     """
@@ -108,7 +108,29 @@ class Personagem:
         return True, itens
 
     def dialogar(self):
-        pass
+        """
+        Mostra os diálogos do personagem.
+        """
+        limpar_terminal()
+        if not self.inventario:
+            print(f"\n{self.nome} não tem nada a dizer.")
+            return
+
+        falas = []
+        respostas = []
+        for i, (fala, conversa) in enumerate(self.dialogos.items(), start=1):
+            print(f"{i}. {fala}")
+            falas.append(fala)
+            respostas.append(conversa)
+        
+        while True:
+            opcao = input(f"\nFalar com {self.nome}: ").strip()
+
+            if opcao.isdigit() and 1 <= int(opcao) <= len(falas):
+                resposta = respostas[int(opcao) - 1]
+                print("\n"+resposta)
+            else: break
+        enter_continuar()
 
     def itens_a_venda(self):
         """

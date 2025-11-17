@@ -36,7 +36,7 @@ class Heroi(Personagem):
             self.inventario = {}
             if moedas > 0:
                 self.adicionar_item_inventario('moeda',moedas) # Adiciona o novo valor de moedas
-        self.experiencia = 0
+        self.experiencia = int(self.experiencia/2)
         limpar_terminal()
         print("Você foi derrotado!")
         print("Parece que seus itens foram levados.")
@@ -139,7 +139,7 @@ class Heroi(Personagem):
         # Se o sistema for aumentado para conter um item como 'armadura', o check deverá levar em conta o tipo de item.
         inventario = self.inventario
         if item in inventario:
-            if not inventario[item].get('equipado',False):
+            if not inventario[item].get('equipado',True):
                 for i in inventario: # Procuramos por outros itens que estejam equipados e os desequipamos
                     if inventario[i].get('equipado', False):
                         self.desequipar_item(i)

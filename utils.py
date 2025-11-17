@@ -2,9 +2,7 @@ import json
 import os
 
 def limpar_terminal():
-    print("\033[H\033[2J", end="")
-    print("\033[H\033[3J", end="")
-    print("\033c", end="")
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def enter_continuar():
     input("\nPressione Enter para continuar...")

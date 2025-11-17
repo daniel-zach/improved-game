@@ -98,13 +98,13 @@ class Vilao(Personagem):
 
             if opcao == "0":
                 if random.random() <= 0.35: # Chance de 35% do jogador ser atacado quando foge
-                    if not self.atacar(jogador):
+                    if not self.atacar(jogador): # Verifica se o jogador morreu
                         print("\nVocê foi atacado enquanto fugia!")
-                    else: 
-                        enter_continuar()
+                    else:
                         break
-                else: print("\nVocê fugiu!")
-                enter_continuar()
+                else:
+                    print("\nVocê fugiu!")
+                    enter_continuar()
                 break
             elif opcao == "1":
                 jogador.atacar(self)
@@ -116,8 +116,7 @@ class Vilao(Personagem):
                 continue
 
             if self.vida > 0: # Se estiver vivo ataca o jogador
-                if self.atacar(jogador):
-                    enter_continuar()
+                if self.atacar(jogador): # Se ao atacar o jogador morrer, encerra a batalha
                     break
             else:
                 limpar_terminal()
